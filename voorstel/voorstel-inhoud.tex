@@ -15,70 +15,145 @@
 \section{Inleiding}%
 \label{sec:inleiding}
 
-Waarover zal je bachelorproef gaan? Introduceer het thema en zorg dat volgende zaken zeker duidelijk aanwezig zijn:
+Goossens Warmte- en Koeltechniek is een Belgiesch HVAC bedrijf dat Installware gebruikt ter ondersteuning van de buitendienst.
+Deze bachelorproef richt zich op de registratie en verwerking van digitale werkbongegevens binnen deze bedrijfscontext.
+De doelgroep voor deze bachelorproef zijn de buitendienstmedewerkers en de kantoormedewerkers die deze gegevens
+raadplegen en verwerken.
 
-\begin{itemize}
-  \item kaderen thema
-  \item de doelgroep
-  \item de probleemstelling en (centrale) onderzoeksvraag
-  \item de onderzoeksdoelstelling
-\end{itemize}
+Wanneer medewerkers gegevens aanpassen zonder betrouwbare netwerkverbinding,
+moet duidelijk zijn hoe deze gegevens lokaal worden bewaard en hoe ze worden
+verwerkt wanneer ze terug netwerkverbinding hebben.
 
-Denk er aan: een typische bachelorproef is \textit{toegepast onderzoek}, wat betekent dat je start vanuit een concrete probleemsituatie in bedrijfscontext, een \textbf{casus}. Het is belangrijk om je onderwerp goed af te bakenen: je gaat voor die \textit{ene specifieke probleemsituatie} op zoek naar een goede oplossing, op basis van de huidige kennis in het vakgebied.
+Het onderzoek vergelijkt twee concreet uitgewerkte aanpakken:
+Een lokale wachtrij met centrale conflictcontrole en een aanpak met conflictvrije gerepliceerde datatypes.
+Het wordt afgebakend tot werknotities en materiaalregistraties. Tijdens de analyse van de huidige werkwijze
+wordt getoetst of deze gegevens en de bijbehorende gebruiksscenario’s representatief zijn voor het bedrijf.
+De technische vergelijking die gemaakt zal worden bij de proof of concept zal geen toegang tot de
+broncode van Installware nodig hebben.
 
-De doelgroep moet ook concreet en duidelijk zijn, dus geen algemene of vaag gedefinieerde groepen zoals \emph{bedrijven}, \emph{developers}, \emph{Vlamingen}, enz. Je richt je in elk geval op it-professionals, een bachelorproef is geen populariserende tekst. Eén specifiek bedrijf (die te maken hebben met een concrete probleemsituatie) is dus beter dan \emph{bedrijven} in het algemeen.
+De hoofdonderzoeksvraag: “Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of conflictvrije gerepliceerde datatypes gebaseerde samenvoeging, biedt de beste afweging tussen gegevenscorrectheid, synchronisatietijd en implementatiecomplexiteit voor offline bewerkte werknotities en materiaalregistraties op digitale werkbonnen bij Goossens Warmte- en Koeltechniek?”
 
-Formuleer duidelijk de onderzoeksvraag! De begeleiders lezen nog steeds te veel voorstellen waarin we geen onderzoeksvraag terugvinden.
+Deelvragen probleemdomein:
+(1) Hoe registreren en verwerken buitendienstmedewerkers en kantoormedewerkers momenteel werknotities en materiaalregistraties met Installware?
+(2) Welke mogelijkheden en beperkingen ervaren zij bij het raadplegen, bewerken en synchroniseren van deze gegevens tijdens en na een onderbroken netwerkverbinding?
+(3) In welke situaties wijzigen meerdere medewerkers dezelfde werkbon en bestaan daar al bepaalde regels voor?
+(4) Welke functionele en technische vereisten stelt het bedrijf aan offline gegevensvastlegging en de daaropvolgende synchronisatie?
 
-Schrijf ook iets over de doelstelling. Wat zie je als het concrete eindresultaat van je onderzoek, naast de uitgeschreven scriptie? Is het een proof-of-concept, een rapport met aanbevelingen, \ldots Met welk eindresultaat kan je je bachelorproef als een succes beschouwen?
+Deelvragen oplossingsdomein:
+
+(1) Hoe kunnen beide synchronisatieaanpakken worden ingericht voor de geselecteerde werkbongegevens en bedrijfsvereisten?
+(2) Hoe verwerken beide implementaties wijzigingen bij verbindingsuitval, onderbroken synchronisatie, herhaalde verzending en gelijktijdige bewerking?
+(3) Hoe verschillen beide implementaties in gegevenscorrectheid en synchronisatietijd bij dezelfde gegevens, gebruiksscenario’s en netwerkomstandigheden?
+(4) Welke implementatiecomplexiteit en beperkingen brengt elke aanpak met zich mee?
+
+Het doel van deze bachelorproef is een onderbouwd advies te formuleren over de geschiktheid van beide synchronisatieaanpakken
+voor de bedrijfsvereisten. Het onderzoek levert een analyse van de huidige werkwijze en vereisten, een zelfstandig prototype met
+twee vergelijkbare implementaties en een evaluatie op basis van reproduceerbare tests op.
+Gegevenscorrectheid wordt daarbij beoordeeld aan de hand van zowel het behoud van registraties als de naleving
+van de vastgestelde regels voor werkbonnen. Het onderzoek heeft niet als doel een volledige vervanging van Installware,
+maar een technisch onderbouwde vergelijking die het bedrijf inzicht geeft in de mogelijkheden en beperkingen van beide aanpakken.
 
 %---------- Stand van zaken ---------------------------------------------------
 
 \section{Literatuurstudie}%
 \label{sec:literatuurstudie}
 
-Hier beschrijf je de \emph{state-of-the-art} rondom je gekozen onderzoeksdomein, d.w.z.\ een inleidende, doorlopende tekst over het onderzoeksdomein van je bachelorproef. Je steunt daarbij heel sterk op de professionele \emph{vakliteratuur}, en niet zozeer op populariserende teksten voor een breed publiek. Wat is de huidige stand van zaken in dit domein, en wat zijn nog eventuele open vragen (die misschien de aanleiding waren tot je onderzoeksvraag!)?
+Bij mobiele applicaties voor buitendienstmedewerkers is het belangrijk dat de ingevoerde gegevens betrouwbaar zijn.
+\textcite{KnowlesEtAl2014} onderzoeken dit bij medewerkers in het wegenonderhoud. \textcite{HardingEtAl2019} onderzoeken
+hoe medewerkers in transportonderhoud gegevens gebruiken bij hun werk. Daarbij brengen ze de bestaande werkprocessen in kaart
+via interviews en observaties. Deze onderzoeken gaan niet specifiek over HVAC-bedrijven, maar tonen wel waarom het belangrijk is om
+eerst te begrijpen hoe medewerkers gegevens registreren en gebruiken. In deze bachelorproef wordt daarom eerst de huidige
+werkwijze van het bedrijf onderzocht.
 
-Je mag de titel van deze sectie ook aanpassen (literatuurstudie, stand van zaken, enz.). Zijn er al gelijkaardige onderzoeken gevoerd? Wat concluderen ze? Wat is het verschil met jouw onderzoek?
+Om ook zonder netwerkverbinding gegevens te kunnen raadplegen, kan een mobiele applicatie gegevens lokaal opslaan.
+De Android-documentatie beschrijft hoe een offline-first applicatie hiervoor een lokale gegevensbron combineert met
+een gegevensbron op het netwerk. Wanneer gebruikers ook offline gegevens moeten kunnen aanpassen, kunnen wijzigingen
+eerst lokaal worden bewaard en daarna in een wachtrij worden geplaatst. Zodra er opnieuw verbinding is, probeert de
+applicatie de wijzigingen door te sturen~\autocite{Google2026OfflineFirst}. Ook \textcite{NingrumEtAl2026} bespreken
+lokale opslag en uitgestelde synchronisatie als veelgebruikte onderdelen van applicaties met offlineondersteuning.
 
-Verwijs bij elke introductie van een term of bewering over het domein naar de vakliteratuur, bijvoorbeeld~\autocite{Hykes2013}! Denk zeker goed na welke werken je refereert en waarom.
+Er bestaan verschillende manieren om voor synchronisatie in mobiele applicaties te zorgen.
+\textcite{McCormickSchmidt2012} beschrijven onder meer wanneer gegevens worden gesynchroniseerd,
+welke gegevens lokaal beschikbaar blijven en welke wijzigingen worden doorgestuurd. De geschikte
+aanpak hangt vooral af van de netwerkverbinding en van hoe recent de gegevens moeten zijn.
+Een wachtrij kan wijzigingen bewaren totdat ze kunnen worden verstuurd, maar lost niet automatisch conflicten op.
+Een conflict kan bijvoorbeeld ontstaan wanneer twee medewerkers dezelfde gegevens aanpassen terwijl ze offline zijn.
+Er zijn dan extra regels nodig om te bepalen welke wijzigingen worden behouden. In de Android-documentatie worden
+onder andere het bijhouden van versies en last-write-wins besproken. Bij last-write-wins wordt één wijziging als de laatste
+beschouwd en behouden, waardoor een andere wijziging kan worden overschreven~\autocite{Google2026OfflineFirst}.
 
-Draag zorg voor correcte literatuurverwijzingen! Een bronvermelding hoort thuis \emph{binnen} de zin waar je je op die bron baseert, dus niet er buiten! Maak meteen een verwijzing als je gebruik maakt van een bron. Doe dit dus \emph{niet} aan het einde van een lange paragraaf. Baseer nooit teveel aansluitende tekst op eenzelfde bron.
+Een andere aanpak maakt gebruik van conflictvrije gerepliceerde datatypes, ook CRDT's genoemd. Daarmee kunnen verschillende
+apparaten elk hun lokale kopie van gegevens aanpassen. Wanneer alle kopieën dezelfde wijzigingen hebben ontvangen, komen ze 
+onder de voorwaarden van het gekozen CRDT tot dezelfde toestand~\autocite{PreguicaEtAl2018}. Er bestaan verschillende CRDT's,
+bijvoorbeeld voor tellers, verzamelingen en tekstgegevens. Elk type heeft regels die bepalen hoe wijzigingen worden samengevoegd.
+De keuze van het datatype en de regels blijft dus belangrijk. Het automatisch samenvoegen van wijzigingen betekent niet dat
+het resultaat ook altijd overeenkomt met wat de gebruikers bedoelden~\autocite{PreguicaEtAl2018}.
 
-Als je informatie over bronnen verzamelt in JabRef, zorg er dan voor dat alle nodige info aanwezig is om de bron terug te vinden (zoals uitvoerig besproken in de lessen Research Methods).
+\textcite{KleppmannEtAl2019} bespreken hoe lokale gegevensopslag en samenwerking tussen apparaten gecombineerd kunnen worden.
+Ze noemen dit local-first software en onderzoeken hoe CRDT's hierbij kunnen helpen. Local-first gaat verder dan
+alleen offline werken en houdt bijvoorbeeld ook rekening met de controle van gebruikers over hun gegevens.
+Een wachtrij en CRDT's zijn daarbij geen volledig
+aparte technieken. Ook een CRDT-gebaseerde applicatie moet wijzigingen bewaren en doorsturen. De vergelijking in dit onderzoek
+gaat daarom over twee concrete implementaties die wijzigingen en conflicten op een andere manier
+verwerken~\autocite{PreguicaEtAl2018}.
 
-% Voor literatuurverwijzingen zijn er twee belangrijke commando's:
-% \autocite{KEY} => (Auteur, jaartal) Gebruik dit als de naam van de auteur
-%   geen onderdeel is van de zin.
-% \textcite{KEY} => Auteur (jaartal)  Gebruik dit als de auteursnaam wel een
-%   functie heeft in de zin (bv. ``Uit onderzoek door Doll & Hill (1954) bleek
-%   ...'')
-
-Je mag deze sectie nog verder onderverdelen in subsecties als dit de structuur van de tekst kan verduidelijken.
+De literatuur beschrijft verschillende mogelijkheden, maar geeft nog geen antwoord op welke aanpak het meest geschikt is
+voor de werkbonnen van het onderzochte bedrijf. Dat apparaten na synchronisatie dezelfde gegevens bevatten, is bovendien niet
+voldoende. Het resultaat moet ook voldoen aan de afspraken over werknotities en materiaalregistraties. Daarom worden de
+bedrijfsvereisten gebruikt om te bepalen wat als een correct resultaat wordt beschouwd. Beide implementaties worden vervolgens
+getest met dezelfde gegevens en situaties. Zo wordt onderzocht hoe ze verschillen in gegevenscorrectheid, synchronisatietijd
+en implementatiecomplexiteit.
 
 %---------- Methodologie ------------------------------------------------------
 \section{Methodologie}%
 \label{sec:methodologie}
 
-Hier beschrijf je hoe je van plan bent het onderzoek te voeren. Welke onderzoekstechniek ga je toepassen om elk van je onderzoeksvragen te beantwoorden? Gebruik je hiervoor literatuurstudie, interviews met belanghebbenden (bv.~voor requirements-analyse), experimenten, simulaties, vergelijkende studie, risico-analyse, PoC, \ldots?
+Dit onderzoek bestaat uit een analyse van de bedrijfscasus en een vergelijkende studie met een proof of concept.
+Eerst worden de huidige werkwijze en de bedrijfsvereisten onderzocht. Daarna worden twee implementaties
+uitgewerkt en onder dezelfde omstandigheden getest. De resultaten vormen de basis voor een advies aan het bedrijf.
 
-Valt je onderwerp onder één van de typische soorten bachelorproeven die besproken zijn in de lessen Research Methods (bv.\ vergelijkende studie of risico-analyse)? Zorg er dan ook voor dat we duidelijk de verschillende stappen terug vinden die we verwachten in dit soort onderzoek!
+In de eerste fase wordt gekeken hoe werknotities en materiaalregistraties momenteel met Installware worden verwerkt.
+Om dit achter te halen wordt contact opgenomen met co-promotor Jarne Schagen. De vragen gaan over de gegevens die medewerkers
+registreren, de mogelijkheden tijdens netwerkuitval, de stappen
+na verbindingsherstel en situaties waarin meerdere medewerkers dezelfde werkbon aanpassen.
 
-Vermijd onderzoekstechnieken die geen objectieve, meetbare resultaten kunnen opleveren. Enquêtes, bijvoorbeeld, zijn voor een bachelorproef informatica meestal \textbf{niet geschikt}. De antwoorden zijn eerder meningen dan feiten en in de praktijk blijkt het ook bijzonder moeilijk om voldoende respondenten te vinden. Studenten die een enquête willen voeren, hebben meestal ook geen goede definitie van de populatie, waardoor ook niet kan aangetoond worden dat eventuele resultaten representatief zijn.
+Het proof of concept bestaat uit een eenvoudige mobiele testapplicatie met lokale opslag en een backend.
+Als voorlopig technisch uitgangspunt wordt React Native met Expo en
+TypeScript gebruikt~\autocite{ReactNativeTypeScript}, met SQLite voor lokale opslag~\autocite{ExpoSQLite}. Voor de
+CRDT-gebaseerde implementatie wordt Yjs gebruikt~\autocite{YjsDocumentation}. De eerste implementatie bewaart wijzigingen in een lokale
+wachtrij. De backend controleert via versienummers of een wijziging op verouderde gegevens is gebaseerd. Conflicten worden
+zichtbaar gemaakt en volgens de vooraf vastgelegde regels afgehandeld. De tweede implementatie gebruikt CRDT's om wijzigingen
+samen te voegen. Beide varianten ondersteunen dezelfde handelingen voor werknotities en materiaalregistraties. Ze gebruiken
+zoveel mogelijk dezelfde gebruikersinterface, gegevens en testomgeving, zodat er zo weinig mogelijk verschillen zijn die invloed zouden kunnen hebben.
 
-Uit dit onderdeel moet duidelijk naar voor komen dat je bachelorproef ook technisch voldoen\-de diepgang zal bevatten. Het zou niet kloppen als een bachelorproef informatica ook door bv.\ een student marketing zou kunnen uitgevoerd worden.
+De tests gebruiken fictieve werkbonnen die aansluiten bij de vastgestelde bedrijfsvereisten. Er worden scenario's opgesteld voor
+herstel van de verbinding, een nieuwe onderbreking tijdens synchronisatie, herhaalde verzending en gelijktijdige
+wijzigingen door meerdere gebruikers.
 
-Je beschrijft ook al welke tools (hardware, software, diensten, \ldots) je denkt hiervoor te gebruiken of te ontwikkelen.
+Gegevenscorrectheid wordt beoordeeld door de gegevens te vergelijken met de resultaten die vooraf werden vastgelegd.
+Daarbij worden ontbrekende registraties, ongewenste dubbels, afwijkingen van de werkbonregels en verschillen tussen gegevenskopieën
+bijgehouden. De synchronisatietijd wordt gemeten
+vanaf het herstel van de verbinding tot alle testwijzigingen zijn verwerkt. Elk testgeval wordt dertig keer uitgevoerd vanuit dezelfde
+beginsituatie. De resultaten worden samengevat met de mediaan en de spreiding.
 
-Probeer ook een tijdschatting te maken. Hoe lang zal je met elke fase van je onderzoek bezig zijn en wat zijn de concrete \emph{deliverables} in elke fase?
+Tot slot worden beide implementaties naast de bedrijfsvereisten gelegd. Het advies vermeldt zowel de voordelen als de beperkingen
+van elke aanpak.
 
 %---------- Verwachte resultaten ----------------------------------------------
 \section{Verwacht resultaat, conclusie}%
 \label{sec:verwachte_resultaten}
 
-Hier beschrijf je welke resultaten je verwacht. Als je metingen en simulaties uitvoert, kan je hier al mock-ups maken van de grafieken samen met de verwachte conclusies. Benoem zeker al je assen en de onderdelen van de grafiek die je gaat gebruiken. Dit zorgt ervoor dat je concreet weet welk soort data je moet verzamelen en hoe je die moet meten.
+Het verwachte resultaat is een vergelijking van twee synchronisatieaanpakken
+voor werknotities en materiaalregistraties, ondersteund door een proof of
+concept. De vergelijking geeft inzicht in gegevenscorrectheid,
+synchronisatietijd en implementatiecomplexiteit.
 
-Wat heeft de doelgroep van je onderzoek aan het resultaat? Op welke manier zorgt jouw bachelorproef voor een meerwaarde?
+Er wordt verwacht dat de verschillen vooral zichtbaar gaan zijn bij
+gelijktijdige wijzigingen. De wachtrijaanpak kan hierbij expliciete
+conflictcontrole vragen, terwijl CRDT's bepaalde wijzigingen automatisch
+kunnen samenvoegen.
 
-Hier beschrijf je wat je verwacht uit je onderzoek, met de motivatie waarom. Het is \textbf{niet} erg indien uit je onderzoek andere resultaten en conclusies vloeien dan dat je hier beschrijft: het is dan juist interessant om te onderzoeken waarom jouw hypothesen niet overeenkomen met de resultaten.
-
+De verwachte conclusie is een onderbouwd advies over welke aanpak het
+beste aansluit bij de bedrijfsvereisten en welke beperkingen er zijn.
+Dit geeft het bedrijf inzicht voor toekomstige keuzes rond
+digitale werkbonnen.
