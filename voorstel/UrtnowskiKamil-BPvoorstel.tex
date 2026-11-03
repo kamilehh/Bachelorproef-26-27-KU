@@ -7,6 +7,7 @@
 % Voor een voorstel in het Engels: voeg de documentclass-optie [english] toe.
 % Let op: kan enkel na toestemming van de bachelorproefcoördinator!
 \documentclass{hogent-article}
+\hyphenation{off-line}
 
 % Invoegen bibliografiebestand
 \addbibresource{voorstel.bib}
@@ -61,12 +62,11 @@ Mobiele applicaties ondersteunen buitendienstmedewerkers bij het registreren van
 Zonder betrouwbare netwerkverbinding moeten wijzigingen lokaal bewaard en later correct verwerkt worden.
 Deze bachelorproef onderzoekt dit voor werknotities en materiaalregistraties op digitale werkbonnen bij
 Goossens Warmte- en Koeltechniek. De hoofdonderzoeksvraag is:
-Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of conflictvrije gerepliceerde
-datatypes gebaseerde samenvoeging,
+Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of een samenvoeging op basis van conflictvrije gerepliceerde datatypes,
 biedt de beste afweging tussen gegevenscorrectheid, synchronisatietijd en implementatiecomplexiteit voor offline bewerkte
 werknotities en materiaalregistraties op digitale werkbonnen bij Goossens Warmte- en Koeltechniek?
 Het doel is een onderbouwd advies voor het bedrijf.
-Op basis van literatuurstudie worden beide aanpakken uitgewerkt in een zelfstandig prototype. Tests vergelijken hun
+Op basis van een literatuurstudie worden beide aanpakken uitgewerkt in een zelfstandig prototype. Tests vergelijken hun
 gedrag bij netwerkuitval, herhaalde verzending en gelijktijdige wijzigingen. De verwachting is dat de
 wachtrijaanpak bepaalde conflicten expliciet meldt, terwijl de andere aanpak een deel van de wijzigingen
 automatisch samenvoegt. De tests moeten aantonen of de resultaten aan de werkbonregels voldoen en welke

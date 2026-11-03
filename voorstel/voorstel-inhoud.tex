@@ -15,14 +15,14 @@
 \section{Inleiding}%
 \label{sec:inleiding}
 
-Goossens Warmte- en Koeltechniek is een Belgiesch HVAC bedrijf dat Installware gebruikt ter ondersteuning van de buitendienst.
+Goossens Warmte- en Koeltechniek is een Belgisch HVAC-bedrijf dat Installware gebruikt ter ondersteuning van de buitendienst.
 Deze bachelorproef richt zich op de registratie en verwerking van digitale werkbongegevens binnen deze bedrijfscontext.
 De doelgroep voor deze bachelorproef zijn de buitendienstmedewerkers en de kantoormedewerkers die deze gegevens
 raadplegen en verwerken.
 
 Wanneer medewerkers gegevens aanpassen zonder betrouwbare netwerkverbinding,
 moet duidelijk zijn hoe deze gegevens lokaal worden bewaard en hoe ze worden
-verwerkt wanneer ze terug netwerkverbinding hebben.
+verwerkt zodra er opnieuw een netwerkverbinding beschikbaar is.
 
 Het onderzoek vergelijkt twee concreet uitgewerkte aanpakken:
 Een lokale wachtrij met centrale conflictcontrole en een aanpak met conflictvrije gerepliceerde datatypes.
@@ -31,7 +31,7 @@ wordt getoetst of deze gegevens en de bijbehorende gebruiksscenario’s represen
 De technische vergelijking die gemaakt zal worden bij de proof of concept zal geen toegang tot de
 broncode van Installware nodig hebben.
 
-De hoofdonderzoeksvraag: “Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of conflictvrije gerepliceerde datatypes gebaseerde samenvoeging, biedt de beste afweging tussen gegevenscorrectheid, synchronisatietijd en implementatiecomplexiteit voor offline bewerkte werknotities en materiaalregistraties op digitale werkbonnen bij Goossens Warmte- en Koeltechniek?”
+De hoofdonderzoeksvraag: “Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of een samenvoeging op basis van conflictvrije gerepliceerde datatypes, biedt de beste afweging tussen gegevenscorrectheid, synchronisatietijd en implementatiecomplexiteit voor offline bewerkte werknotities en materiaalregistraties op digitale werkbonnen bij Goossens Warmte- en Koeltechniek?”
 
 Deelvragen probleemdomein:
 (1) Hoe registreren en verwerken buitendienstmedewerkers en kantoormedewerkers momenteel werknotities en materiaalregistraties met Installware?
@@ -66,7 +66,7 @@ eerst te begrijpen hoe medewerkers gegevens registreren en gebruiken. In deze ba
 werkwijze van het bedrijf onderzocht.
 
 Om ook zonder netwerkverbinding gegevens te kunnen raadplegen, kan een mobiele applicatie gegevens lokaal opslaan.
-De Android-documentatie beschrijft hoe een offline-first applicatie hiervoor een lokale gegevensbron combineert met
+De documentatie van Android beschrijft hoe een offline-first applicatie hiervoor een lokale gegevensbron combineert met
 een gegevensbron op het netwerk. Wanneer gebruikers ook offline gegevens moeten kunnen aanpassen, kunnen wijzigingen
 eerst lokaal worden bewaard en daarna in een wachtrij worden geplaatst. Zodra er opnieuw verbinding is, probeert de
 applicatie de wijzigingen door te sturen~\autocite{Google2026OfflineFirst}. Ook \textcite{NingrumEtAl2026} bespreken
@@ -78,7 +78,7 @@ welke gegevens lokaal beschikbaar blijven en welke wijzigingen worden doorgestuu
 aanpak hangt vooral af van de netwerkverbinding en van hoe recent de gegevens moeten zijn.
 Een wachtrij kan wijzigingen bewaren totdat ze kunnen worden verstuurd, maar lost niet automatisch conflicten op.
 Een conflict kan bijvoorbeeld ontstaan wanneer twee medewerkers dezelfde gegevens aanpassen terwijl ze offline zijn.
-Er zijn dan extra regels nodig om te bepalen welke wijzigingen worden behouden. In de Android-documentatie worden
+Er zijn dan extra regels nodig om te bepalen welke wijzigingen worden behouden. In de documentatie van Android worden
 onder andere het bijhouden van versies en last-write-wins besproken. Bij last-write-wins wordt één wijziging als de laatste
 beschouwd en behouden, waardoor een andere wijziging kan worden overschreven~\autocite{Google2026OfflineFirst}.
 
@@ -113,7 +113,7 @@ Eerst worden de huidige werkwijze en de bedrijfsvereisten onderzocht. Daarna wor
 uitgewerkt en onder dezelfde omstandigheden getest. De resultaten vormen de basis voor een advies aan het bedrijf.
 
 In de eerste fase wordt gekeken hoe werknotities en materiaalregistraties momenteel met Installware worden verwerkt.
-Om dit achter te halen wordt contact opgenomen met co-promotor Jarne Schagen. De vragen gaan over de gegevens die medewerkers
+Om dit te achterhalen wordt contact opgenomen met co-promotor Jarne Schagen. De vragen gaan over de gegevens die medewerkers
 registreren, de mogelijkheden tijdens netwerkuitval, de stappen
 na verbindingsherstel en situaties waarin meerdere medewerkers dezelfde werkbon aanpassen.
 
@@ -130,8 +130,8 @@ De tests gebruiken fictieve werkbonnen die aansluiten bij de vastgestelde bedrij
 herstel van de verbinding, een nieuwe onderbreking tijdens synchronisatie, herhaalde verzending en gelijktijdige
 wijzigingen door meerdere gebruikers.
 
-Gegevenscorrectheid wordt beoordeeld door de gegevens te vergelijken met de resultaten die vooraf werden vastgelegd.
-Daarbij worden ontbrekende registraties, ongewenste dubbels, afwijkingen van de werkbonregels en verschillen tussen gegevenskopieën
+Gegevenscorrectheid wordt beoordeeld door de gegevens te vergelijken met de vooraf vastgelegde verwachte resultaten.
+Daarbij worden ontbrekende registraties, ongewenste duplicaten, afwijkingen van de werkbonregels en verschillen tussen gegevenskopieën
 bijgehouden. De synchronisatietijd wordt gemeten
 vanaf het herstel van de verbinding tot alle testwijzigingen zijn verwerkt. Elk testgeval wordt dertig keer uitgevoerd vanuit dezelfde
 beginsituatie. De resultaten worden samengevat met de mediaan en de spreiding.
@@ -148,8 +148,8 @@ voor werknotities en materiaalregistraties, ondersteund door een proof of
 concept. De vergelijking geeft inzicht in gegevenscorrectheid,
 synchronisatietijd en implementatiecomplexiteit.
 
-Er wordt verwacht dat de verschillen vooral zichtbaar gaan zijn bij
-gelijktijdige wijzigingen. De wachtrijaanpak kan hierbij expliciete
+Er wordt verwacht dat de verschillen vooral bij gelijktijdige wijzigingen zichtbaar zullen worden.
+De wachtrijaanpak kan hierbij expliciete
 conflictcontrole vragen, terwijl CRDT's bepaalde wijzigingen automatisch
 kunnen samenvoegen.
 
