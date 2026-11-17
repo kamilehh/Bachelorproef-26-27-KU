@@ -6,46 +6,125 @@
 % bijzonder aan wat de link is met het vorige en volgende hoofdstuk.
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
+Bij mobiele applicaties voor buitendienstmedewerkers is het belangrijk dat de ingevoerde gegevens betrouwbaar zijn.
+\textcite{KnowlesEtAl2014} onderzoeken dit bij medewerkers in het wegenonderhoud. \textcite{HardingEtAl2019} onderzoeken
+hoe medewerkers in transportonderhoud gegevens gebruiken bij hun werk. Daarbij brengen ze de bestaande werkprocessen in kaart
+via interviews en observaties. Deze onderzoeken gaan niet specifiek over HVAC-bedrijven, maar tonen wel waarom het belangrijk is om
+eerst te begrijpen hoe medewerkers gegevens registreren en gebruiken. In deze bachelorproef wordt daarom eerst de huidige
+werkwijze van het bedrijf onderzocht.
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de bachelorproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+Om ook zonder netwerkverbinding gegevens te kunnen raadplegen, kan een mobiele applicatie gegevens lokaal opslaan.
+De documentatie van Android beschrijft hoe een offline-first applicatie hiervoor een lokale gegevensbron combineert met
+een gegevensbron op het netwerk. Wanneer gebruikers ook offline gegevens moeten kunnen aanpassen, kunnen wijzigingen
+eerst lokaal worden bewaard en daarna in een wachtrij worden geplaatst. Zodra er opnieuw verbinding is, probeert de
+applicatie de wijzigingen door te sturen~\autocite{Google2026OfflineFirst}. Ook \textcite{NingrumEtAl2026} bespreken
+lokale opslag en uitgestelde synchronisatie als veelgebruikte onderdelen van applicaties met offlineondersteuning.
+Bij offline gegevensregistratie is het belangrijk om wijzigingen blijvend op te slaan.
+Alleen gegevens tijdelijk in het geheugen bewaren is niet
+voldoende wanneer een applicatie wordt afgesloten. De documentatie van
+Android beschrijft daarom lokale opslag op het apparaat en het bewaren
+van werk dat later moet worden uitgevoerd~\autocite{Google2026OfflineFirst}.
+Ook na verbindingsherstel kan een synchronisatiepoging mislukken.
+De applicatie moet dan kunnen bepalen welke wijzigingen nog moeten
+worden verstuurd. Dezelfde documentatie bespreekt hiervoor het opnieuw
+proberen met steeds langere wachttijden tussen mislukte pogingen.
+Dit voorkomt dat de applicatie onmiddellijk blijft proberen wanneer
+de verbinding of server nog niet beschikbaar is~\autocite{Google2026OfflineFirst}.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+Er bestaan verschillende manieren om voor synchronisatie in mobiele applicaties te zorgen.
+\textcite{McCormickSchmidt2012} beschrijven onder meer wanneer gegevens worden gesynchroniseerd,
+welke gegevens lokaal beschikbaar blijven en welke wijzigingen worden doorgestuurd. De geschikte
+aanpak hangt vooral af van de netwerkverbinding en van hoe recent de gegevens moeten zijn.
+Een wachtrij kan wijzigingen bewaren totdat ze kunnen worden verstuurd, maar lost niet automatisch conflicten op.
+Een conflict kan bijvoorbeeld ontstaan wanneer twee medewerkers dezelfde gegevens aanpassen terwijl ze offline zijn.
+Er zijn dan extra regels nodig om te bepalen welke wijzigingen worden behouden. In de documentatie van Android worden
+onder andere het bijhouden van versies en last-write-wins besproken. Bij last-write-wins wordt één wijziging als de laatste
+beschouwd en behouden, waardoor een andere wijziging kan worden overschreven~\autocite{Google2026OfflineFirst}.
+Naast conflicten tussen gebruikers moet rekening worden gehouden met herhaalde verzending.
+Een server kan een wijziging al hebben verwerkt terwijl het antwoord de mobiele applicatie niet bereikt.
+Opnieuw versturen mag dan niet onbedoeld een tweede registratie veroorzaken. Een bewerking is idempotent wanneer meerdere
+identieke verzoeken hetzelfde bedoelde effect hebben als één verzoek. Dit wordt beschreven in
+de HTTP-specificatie~\autocite{FieldingEtAl2022}. Voor een materiaalregistratie is het bijvoorbeeld belangrijk om
+onderscheid te maken tussen het opnieuw versturen van dezelfde registratie en het toevoegen van een nieuw verbruik.
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+Centrale conflictcontrole kan daarnaast voorkomen dat een wijziging op basis van verouderde gegevens een recentere wijziging overschrijft.
+De HTTP-specificatie beschrijft hiervoor onder meer het gebruik van een ETag, een identificatie van een versie, samen met de
+voorwaarde If-Match. De server controleert dan of de versie waarop het verzoek is gebaseerd nog overeenkomt met de huidige versie.
+Als dat niet het geval is, kan het verzoek worden afgewezen. Deze controle detecteert een mogelijk conflict, maar bepaalt nog niet
+hoe de verschillende wijzigingen inhoudelijk moeten worden afgehandeld~\autocite{FieldingEtAl2022}.
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+Een andere aanpak maakt gebruik van conflictvrije gerepliceerde datatypes, ook CRDT's genoemd. Daarmee kunnen verschillende
+apparaten elk hun lokale kopie van gegevens aanpassen. Wanneer alle kopieën dezelfde wijzigingen hebben ontvangen, komen ze
+onder de voorwaarden van het gekozen CRDT tot dezelfde toestand~\autocite{PreguicaEtAl2018}. Er bestaan verschillende CRDT's,
+bijvoorbeeld voor tellers, verzamelingen en tekstgegevens. Elk type heeft regels die bepalen hoe wijzigingen worden samengevoegd.
+De keuze van het datatype en de regels blijft dus belangrijk. Het automatisch samenvoegen van wijzigingen betekent niet dat
+het resultaat ook altijd overeenkomt met wat de gebruikers bedoelden~\autocite{PreguicaEtAl2018}.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\textwidth]{grail.jpg}
-  \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
-\end{figure}
+Bij CRDT's wordt onderscheid gemaakt tussen het uitwisselen van toestanden en het uitwisselen van bewerkingen. Bij de eerste aanpak
+stuurt een apparaat zijn toestand door, waarna die met de lokale toestand van een ander apparaat wordt samengevoegd. Bij de tweede 
+aanpak worden de uitgevoerde bewerkingen doorgestuurd en op de andere kopieën toegepast. Beide aanpakken stellen voorwaarden aan de
+samenvoeging en de uitwisseling van gegevens~\autocite{PreguicaEtAl2018}.
 
-\begin{listing}
-  \begin{minted}{python}
-    import pandas as pd
-    import seaborn as sns
+Ook de betekenis van een bewerking speelt een rol. Het verhogen van een hoeveelheid is bijvoorbeeld een andere handeling dan het vervangen 
+van die hoeveelheid door een nieuwe waarde. Een CRDT-teller kan verhogingen en verlagingen combineren, terwijl voor het gelijktijdig
+vervangen van een waarde aanvullende keuzes nodig zijn~\autocite{PreguicaEtAl2018}.
 
-    penguins = sns.load_dataset('penguins')
-    sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
-  \end{minted}
-  \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
-\end{listing}
+\textcite{KleppmannEtAl2019} bespreken hoe lokale gegevensopslag en samenwerking tussen apparaten gecombineerd kunnen worden.
+Ze noemen dit local-first software en onderzoeken hoe CRDT's hierbij kunnen helpen. Local-first gaat verder dan
+alleen offline werken en houdt bijvoorbeeld ook rekening met de controle van gebruikers over hun gegevens.
+Een wachtrij en CRDT's zijn daarbij geen volledig
+aparte technieken. Ook een CRDT-gebaseerde applicatie moet wijzigingen bewaren en doorsturen. De vergelijking in dit onderzoek
+gaat daarom over twee concrete implementaties die wijzigingen en conflicten op een andere manier
+verwerken~\autocite{PreguicaEtAl2018}.
 
-\lipsum[7-20]
+Overeenstemming tussen gegevenskopieën moet worden onderscheiden van het naleven van applicatieregels. \textcite{BailisEtAl2014} onderzoeken
+onder welke voorwaarden bewerkingen zonder onderlinge afstemming kunnen worden uitgevoerd terwijl vastgelegde regels behouden blijven.
+Hun analyse laat zien dat dit afhangt van de combinatie van de regels en de toegelaten bewerkingen. Sommige combinaties kunnen zonder
+afstemming correct blijven, terwijl andere wel afstemming vereisen.
 
-\begin{table}
-  \centering
-  \begin{tabular}{lcr}
-    \toprule
-    \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
-    $\alpha$         & $\beta$          & $\gamma$         \\
-    \midrule
-    A                & 10.230           & a                \\
-    B                & 45.678           & b                \\
-    C                & 99.987           & c                \\
-    \bottomrule
-  \end{tabular}
-  \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
-\end{table}
+Toegepast op werkbonnen betekent dit dat automatisch samengevoegde gegevens afzonderlijk aan de bedrijfsvereisten moeten worden getoetst.
+Bijvoorbeeld dat elke materiaalregistratie aan een bestaande werkbon gekoppeld blijft. Welke regels daadwerkelijk
+gelden bij Goossens Warmte- en Koeltechniek, wordt tijdens de
+bedrijfsanalyse vastgesteld.
+
+De literatuur beschrijft verschillende mogelijkheden, maar geeft nog geen antwoord op welke aanpak het meest geschikt is
+voor de werkbonnen van het onderzochte bedrijf. Dat apparaten na synchronisatie dezelfde gegevens bevatten, is bovendien niet
+voldoende. Het resultaat moet ook voldoen aan de afspraken over werknotities en materiaalregistraties. Daarom worden de
+bedrijfsvereisten gebruikt om te bepalen wat als een correct resultaat wordt beschouwd. Beide implementaties worden vervolgens
+getest met dezelfde gegevens en situaties. Zo wordt onderzocht hoe ze verschillen in gegevenscorrectheid, synchronisatietijd
+en implementatiecomplexiteit.
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{grail.jpg}
+%   \caption[Voorbeeld figuur.]{\label{fig:grail}Voorbeeld van invoegen van een figuur. Zorg altijd voor een uitgebreid bijschrift dat de figuur volledig beschrijft zonder in de tekst te moeten gaan zoeken. Vergeet ook je bronvermelding niet!}
+% \end{figure}
+
+% \begin{listing}
+%   \begin{minted}{python}
+%     import pandas as pd
+%     import seaborn as sns 
+
+%     penguins = sns.load_dataset('penguins')
+%     sns.relplot(data=penguins, x="flipper_length_mm", y="bill_length_mm", hue="species")
+%   \end{minted}
+%   \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
+% \end{listing}
+
+% \lipsum[7-20]
+
+% \begin{table}
+%   \centering
+%   \begin{tabular}{lcr}
+%     \toprule
+%     \textbf{Kolom 1} & \textbf{Kolom 2} & \textbf{Kolom 3} \\
+%     $\alpha$         & $\beta$          & $\gamma$         \\
+%     \midrule
+%     A                & 10.230           & a                \\
+%     B                & 45.678           & b                \\
+%     C                & 99.987           & c                \\
+%     \bottomrule
+%   \end{tabular}
+%   \caption[Voorbeeld tabel]{\label{tab:example}Voorbeeld van een tabel.}
+% \end{table}
 

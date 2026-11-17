@@ -26,5 +26,39 @@
 %% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
 %% en geef het een gepaste titel.
 
-\lipsum[21-25]
+Dit onderzoek bestaat uit een analyse van de bedrijfscasus en een vergelijkende studie met een proof of concept.
+Eerst worden de huidige werkwijze en de bedrijfsvereisten onderzocht. Daarna worden twee implementaties
+uitgewerkt en onder dezelfde omstandigheden getest. De resultaten vormen de basis voor een advies aan het bedrijf.
+
+In de eerste fase wordt gekeken hoe werknotities en materiaalregistraties momenteel met Installware worden verwerkt.
+Om dit te achterhalen wordt contact opgenomen met co-promotor Jarne Schagen. De vragen gaan over de gegevens die medewerkers
+registreren, de mogelijkheden tijdens netwerkuitval, de stappen
+na verbindingsherstel en situaties waarin meerdere medewerkers dezelfde werkbon aanpassen. 
+Ter voorbereiding van de bevraging is een vragenlijst opgesteld voor co-promotor Jarne Schagen. De vragen zijn in niet-technische taal
+geformuleerd en vragen naar concrete voorbeelden uit de dagelijkse werking. Ze behandelen het gebruik van werkbonnen, werknotities en
+materiaalregistraties, de mogelijkheden bij netwerkuitval en het aanpassen van dezelfde werkbon door meerdere medewerkers.
+De antwoorden dienen als basis om de huidige werkwijze en bedrijfsvereisten verder in kaart te brengen.
+
+Het proof of concept bestaat uit een eenvoudige mobiele testapplicatie met lokale opslag en een backend.
+Als voorlopig technisch uitgangspunt wordt React Native met Expo en
+TypeScript gebruikt~\autocite{ReactNativeTypeScript}, met SQLite voor lokale opslag~\autocite{ExpoSQLite}. Voor de
+CRDT-gebaseerde implementatie wordt Yjs gebruikt~\autocite{YjsDocumentation}. De eerste implementatie bewaart wijzigingen in een lokale
+wachtrij. De backend controleert via versienummers of een wijziging op verouderde gegevens is gebaseerd. Conflicten worden
+zichtbaar gemaakt en volgens de vooraf vastgelegde regels afgehandeld. De tweede implementatie gebruikt CRDT's om wijzigingen
+samen te voegen. Beide varianten ondersteunen dezelfde handelingen voor werknotities en materiaalregistraties. Ze gebruiken
+zoveel mogelijk dezelfde gebruikersinterface, gegevens en testomgeving, zodat er zo weinig mogelijk verschillen zijn die invloed zouden kunnen hebben.
+
+De tests gebruiken fictieve werkbonnen die aansluiten bij de vastgestelde bedrijfsvereisten. Er worden scenario's opgesteld voor
+herstel van de verbinding, een nieuwe onderbreking tijdens synchronisatie, herhaalde verzending en gelijktijdige
+wijzigingen door meerdere gebruikers.
+
+Gegevenscorrectheid wordt beoordeeld door de gegevens te vergelijken met de vooraf vastgelegde verwachte resultaten.
+Daarbij worden ontbrekende registraties, ongewenste duplicaten, afwijkingen van de werkbonregels en verschillen tussen gegevenskopieën
+bijgehouden. De synchronisatietijd wordt gemeten
+vanaf het herstel van de verbinding tot alle testwijzigingen zijn verwerkt. Elk testgeval wordt dertig keer uitgevoerd vanuit dezelfde
+beginsituatie. De resultaten worden samengevat met de mediaan en de spreiding.
+
+Tot slot worden beide implementaties naast de bedrijfsvereisten gelegd. Het advies vermeldt zowel de voordelen als de beperkingen
+van elke aanpak.
+
 

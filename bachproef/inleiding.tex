@@ -5,32 +5,50 @@
 \chapter{\IfLanguageName{dutch}{Inleiding}{Introduction}}%
 \label{ch:inleiding}
 
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
-
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+Goossens Warmte- en Koeltechniek is een Belgisch HVAC-bedrijf dat Installware gebruikt ter ondersteuning van de buitendienst.
+Deze bachelorproef richt zich op de registratie en verwerking van digitale werkbongegevens binnen deze bedrijfscontext.
+De doelgroep voor deze bachelorproef zijn de buitendienstmedewerkers en de kantoormedewerkers die deze gegevens
+raadplegen en verwerken.
 
 \section{\IfLanguageName{dutch}{Probleemstelling}{Problem Statement}}%
 \label{sec:probleemstelling}
 
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's'', systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+Wanneer medewerkers gegevens aanpassen zonder betrouwbare netwerkverbinding,
+moet duidelijk zijn hoe deze gegevens lokaal worden bewaard en hoe ze worden
+verwerkt zodra er opnieuw een netwerkverbinding beschikbaar is.
+
+Het onderzoek vergelijkt twee concreet uitgewerkte aanpakken:
+Een lokale wachtrij met centrale conflictcontrole en een aanpak met conflictvrije gerepliceerde datatypes.
+Het wordt afgebakend tot werknotities en materiaalregistraties. Tijdens de analyse van de huidige werkwijze
+wordt getoetst of deze gegevens en de bijbehorende gebruiksscenario’s representatief zijn voor het bedrijf.
+De technische vergelijking die gemaakt zal worden bij de proof of concept zal geen toegang tot de broncode van Installware nodig hebben.
 
 \section{\IfLanguageName{dutch}{Onderzoeksvraag}{Research question}}%
 \label{sec:onderzoeksvraag}
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+De hoofdonderzoeksvraag: “Welke van twee synchronisatieaanpakken, een lokale wachtrij met centrale conflictcontrole of een samenvoeging op basis van conflictvrije gerepliceerde datatypes, biedt de beste afweging tussen gegevenscorrectheid, synchronisatietijd en implementatiecomplexiteit voor offline bewerkte werknotities en materiaalregistraties op digitale werkbonnen bij Goossens Warmte- en Koeltechniek?”
+
+Deelvragen probleemdomein:
+(1) Hoe registreren en verwerken buitendienstmedewerkers en kantoormedewerkers momenteel werknotities en materiaalregistraties met Installware?
+(2) Welke mogelijkheden en beperkingen ervaren zij bij het raadplegen, bewerken en synchroniseren van deze gegevens tijdens en na een onderbroken netwerkverbinding?
+(3) In welke situaties wijzigen meerdere medewerkers dezelfde werkbon en bestaan daar al bepaalde regels voor?
+(4) Welke functionele en technische vereisten stelt het bedrijf aan offline gegevensvastlegging en de daaropvolgende synchronisatie?
+
+Deelvragen oplossingsdomein:
+(1) Hoe kunnen beide synchronisatieaanpakken worden ingericht voor de geselecteerde werkbongegevens en bedrijfsvereisten?
+(2) Hoe verwerken beide implementaties wijzigingen bij verbindingsuitval, onderbroken synchronisatie, herhaalde verzending en gelijktijdige bewerking?
+(3) Hoe verschillen beide implementaties in gegevenscorrectheid en synchronisatietijd bij dezelfde gegevens, gebruiksscenario’s en netwerkomstandigheden?
+(4) Welke implementatiecomplexiteit en beperkingen brengt elke aanpak met zich mee?
 
 \section{\IfLanguageName{dutch}{Onderzoeksdoelstelling}{Research objective}}%
 \label{sec:onderzoeksdoelstelling}
 
-Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk. Gaat het bv.\ om een proof-of-concept, een prototype, een verslag met aanbevelingen, een vergelijkende studie, enz.
+Het doel van deze bachelorproef is een onderbouwd advies te formuleren over de geschiktheid van beide synchronisatieaanpakken
+voor de bedrijfsvereisten. Het onderzoek levert een analyse van de huidige werkwijze en vereisten, een zelfstandig prototype met
+twee vergelijkbare implementaties en een evaluatie op basis van reproduceerbare tests op.
+Gegevenscorrectheid wordt daarbij beoordeeld aan de hand van zowel het behoud van registraties als de naleving
+van de vastgestelde regels voor werkbonnen. Het onderzoek heeft niet als doel een volledige vervanging van Installware,
+maar een technisch onderbouwde vergelijking die het bedrijf inzicht geeft in de mogelijkheden en beperkingen van beide aanpakken.
 
 \section{\IfLanguageName{dutch}{Opzet van deze bachelorproef}{Structure of this bachelor thesis}}%
 \label{sec:opzet-bachelorproef}
